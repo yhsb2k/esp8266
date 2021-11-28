@@ -1,0 +1,42 @@
+name: build
+
+on: [push, pull_request]
+
+env:
+  GCC_ARM_NONE_EABI_VERSION: 10.3-2021.10
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Install dependencies
+        run: |
+            [System.Net.WebClient]::new().downloadFile("https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-win32.zip", "xtensa-lx106-elf-gcc.zip")
+            [System.IO.Compression.ZipFile]::ExtractToDirectory("xtensa-lx106-elf-gcc.zip", "C:\") | Remove-Item
+            echo "C:\xtensa-lx106-elf\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Checkout with submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: make
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+            wget -q https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
+            sudo tar xjf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz -C /usr/share/
+            rm xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
+            echo "/usr/share/gcc-arm-none-eabi-$GCC_ARM_NONE_EABI_VERSION/bin" >> $GITHUB_PATH
+
+      - name: Checkout with submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: make
