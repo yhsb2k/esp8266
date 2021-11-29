@@ -2,9 +2,6 @@ name: build
 
 on: [push, pull_request]
 
-env:
-  GCC_ARM_NONE_EABI_VERSION: 10.3-2021.10
-
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -14,6 +11,7 @@ jobs:
             [System.Net.WebClient]::new().downloadFile("https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-win32.zip", "xtensa-lx106-elf-gcc.zip")
             [System.IO.Compression.ZipFile]::ExtractToDirectory("xtensa-lx106-elf-gcc.zip", "C:\") | Remove-Item
             echo "C:\xtensa-lx106-elf\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            python -m pip install --user -r third_party/ESP8266_RTOS_SDK/requirements.txt
 
       - name: Checkout with submodules
         uses: actions/checkout@v2
@@ -31,7 +29,8 @@ jobs:
             wget -q https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
             sudo tar xjf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz -C /usr/share/
             rm xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
-            echo "/usr/share/gcc-arm-none-eabi-$GCC_ARM_NONE_EABI_VERSION/bin" >> $GITHUB_PATH
+            echo "/usr/share/xtensa-lx106-elf\bin" >> $GITHUB_PATH
+            python -m pip install --user -r third_party/ESP8266_RTOS_SDK/requirements.txt
 
       - name: Checkout with submodules
         uses: actions/checkout@v2
