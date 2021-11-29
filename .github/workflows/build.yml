@@ -7,6 +7,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install dependencies
+        uses: actions/setup-python@v2
+        uses: py-actions/py-dependency-install@v2
+          with:
+            path: https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/requirements.txt
         run: |
             [System.Net.WebClient]::new().downloadFile("https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-win32.zip", "xtensa-lx106-elf-gcc.zip")
             [System.IO.Compression.ZipFile]::ExtractToDirectory("xtensa-lx106-elf-gcc.zip", "C:\") | Remove-Item
@@ -25,6 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
+        uses: actions/setup-python@v2
+        uses: py-actions/py-dependency-install@v2
+          with:
+            path: https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/requirements.txt
         run: |
             wget -q https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
             sudo tar xjf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz -C /usr/share/
