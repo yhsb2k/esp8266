@@ -19,5 +19,6 @@ make reset - Reset the target
 ## Requirements
 * [GNU Xtensa Embedded Toolchain](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html)
 * [CMake](https://cmake.org/download)
-* [Make](http://gnuwin32.sourceforge.net/packages/make.htm)
+* [Make](https://winlibs.com)
+* [Ninja](https://ninja-build.org)
 * [Python3](https://www.python.org/downloads) with installed [requirements](https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/requirements.txt)
