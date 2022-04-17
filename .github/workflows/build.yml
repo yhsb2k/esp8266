@@ -20,6 +20,9 @@ jobs:
           mkdir C:\ninja
           tar -xf ninja-win.zip -C C:\ninja
           Add-Content $env:GITHUB_PATH "C:\ninja"
+          # Installing esp-idf requirements
+          python -m pip install --upgrade pip
+          python -m pip install -r https://raw.githubusercontent.com/espressif/ESP8266_RTOS_SDK/master/requirements.txt
 
       - name: Checkout with submodules
         uses: actions/checkout@v2
@@ -44,6 +47,9 @@ jobs:
         with:
           name: esp8266-${{env.git_suffix}}
           path: |
+            build/bootloader.bin
+            build/bootloader.elf
+            build/bootloader.map
             build/esp8266
             build/esp8266.bin
             build/esp8266.map
@@ -56,7 +62,8 @@ jobs:
         run: |
           wget -q https://dl.espressif.com/dl/xtensa-lx106-elf-$gcc_xtensa_lx106_version-linux-amd64.tar.gz
           sudo tar -xzf xtensa-lx106-elf-$gcc_xtensa_lx106_version-linux-amd64.tar.gz -C /usr/share/
-          echo "/usr/share/xtensa-lx106-elf\bin" >> $GITHUB_PATH
+          echo "/usr/share/xtensa-lx106-elf/bin" >> $GITHUB_PATH
+          python3 -m pip install --upgrade pip
           python3 -m pip install --user -r https://raw.githubusercontent.com/espressif/ESP8266_RTOS_SDK/master/requirements.txt
           sudo apt update && sudo apt install ninja-build
 
